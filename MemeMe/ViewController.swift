@@ -27,23 +27,21 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         NSFontAttributeName: UIFont(name: "HelveticaNeue-CondensedBlack", size: 40)!,
         NSStrokeWidthAttributeName: -3.0]
     
-    
+    func configure(textField: UITextField, text: String, defaultAttributes: [String:Any]){
+        // set delegation, text, attribtues, etc ...
+        textField.text = text
+        textField.defaultTextAttributes = defaultAttributes
+        textField.delegate = self
+        textField.textAlignment = .center
+   
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         shareButton.isEnabled = false
-
-        topText.text = "TOP"
-        topText.defaultTextAttributes = memeTextAttributes
-        topText.delegate = self
-        
-        bottomText.delegate = self
-        bottomText.text = "BOTTOM"
-        
-        bottomText.defaultTextAttributes = memeTextAttributes
-        topText.textAlignment = .center
-        bottomText.textAlignment = .center
+        configure(textField: topText, text: "TOP", defaultAttributes: memeTextAttributes)
+        configure(textField: bottomText, text: "BOTTOM", defaultAttributes: memeTextAttributes)
         
     }
     
@@ -56,19 +54,21 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
     }
+    
+    func presentImagePickerWith(sourceType: UIImagePickerControllerSourceType){
+        let controller = UIImagePickerController()
+        controller.sourceType = sourceType
+        controller.delegate = self
+        present(controller, animated: true, completion: nil)
+        
+    }
 
     @IBAction func takeAPicture(_ sender: UIBarButtonItem) {
-        let controller = UIImagePickerController()
-        controller.delegate = self
-        controller.sourceType = .camera
-        present(controller, animated: true, completion: nil)
+        presentImagePickerWith(sourceType: .camera)
     }
     
     @IBAction func choosePictureFromAlbum(_ sender: UIBarButtonItem) {
-        let controller = UIImagePickerController()
-        controller.delegate = self
-        controller.sourceType = .photoLibrary
-        present(controller, animated: true, completion: nil)
+        presentImagePickerWith(sourceType: .photoLibrary)
     }
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
@@ -167,7 +167,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     
     func save() {
         // Create the meme
-        let meme = Meme(topText: topText.text!, bottomText: bottomText.text!, originalImage: imageView.image!, memedImage: memedImage)
+        _ = Meme(topText: topText.text!, bottomText: bottomText.text!, originalImage: imageView.image!, memedImage: memedImage)
     }
 
 }
