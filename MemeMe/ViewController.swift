@@ -97,7 +97,12 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         let controller = UIActivityViewController(activityItems: [memedImage], applicationActivities: nil)
 //        pass the ActivityViewController a memedImage as an activity item
 //        present the ActivityViewController
-        present(controller, animated: true, completion: save)
+        controller.completionWithItemsHandler = {(activity, completed, items, error) in
+            if completed{
+                self.save()
+            }
+        }
+        present(controller, animated: true, completion: nil)
     }
     
     func textFieldDidBeginEditing(_ textField: UITextField) {
@@ -125,14 +130,14 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     }
     
     func keyboardWillShow(_ notification:Notification) {
-        
-        view.frame.origin.y = 0 - getKeyboardHeight(notification)
+        if bottomText.isFirstResponder {
+            view.frame.origin.y = 0 - getKeyboardHeight(notification)
+        }
     }
     
     func keyboardWillHide(_ notification: NSNotification) {
-        if bottomText.isFirstResponder {
             view.frame.origin.y = 0
-        }
+        
     }
     
     func getKeyboardHeight(_ notification:Notification) -> CGFloat {
@@ -167,16 +172,25 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     
     func save() {
         // Create the meme
+//        _ = Meme(topText: topText.text!, bottomText: bottomText.text!, originalImage: imageView.image!, memedImage: memedImage)
+        
         _ = Meme(topText: topText.text!, bottomText: bottomText.text!, originalImage: imageView.image!, memedImage: memedImage)
     }
 
 }
 
-struct Meme{
+class Meme{
     var topText: String
     var bottomText: String
     var originalImage: UIImage?
     var memedImage: UIImage?
+    
+    init(topText: String, bottomText: String, originalImage: UIImage, memedImage:UIImage) {
+        self.topText = topText
+        self.bottomText = bottomText
+        self.originalImage = originalImage
+        self.memedImage = memedImage
+    }
     
 }
 
