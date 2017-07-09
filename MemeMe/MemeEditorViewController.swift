@@ -1,5 +1,5 @@
 //
-//  ViewController.swift
+//  MemeEditorViewController.swift
 //  MemeMe
 //
 //  Created by Polina Fiksson on 29/06/2017.
@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextFieldDelegate {
+class MemeEditorViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextFieldDelegate {
 
     @IBOutlet weak var appToolbar: UIToolbar!
     @IBOutlet weak var shareButton: UIBarButtonItem!
@@ -107,7 +107,9 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     }
     
     func textFieldDidBeginEditing(_ textField: UITextField) {
-        textField.text = ""
+        if textField.text == "TOP" || textField.text == "BOTTOM" {
+            textField.text = ""
+        }
         
     }
     
@@ -150,11 +152,8 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     
     func generateMemedImage() -> UIImage {
         
-        // TODO: Hide toolbar and navbar
-        self.navigationController?.setNavigationBarHidden(true, animated: true)
-        //self.navigationController?.setToolbarHidden(true, animated: true)
-        appToolbar.isHidden = true
-        
+        // Hide toolbar and navbar
+        hideBars(isHidden: true)
         
         // Render view to an image
         UIGraphicsBeginImageContext(self.view.frame.size)
@@ -164,11 +163,14 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         
         // TODO: Show toolbar and navbar
         
-        self.navigationController?.setNavigationBarHidden(false, animated: false)
-        
-        appToolbar.isHidden = false
-        
+        hideBars(isHidden: false)
         return memedImage
+    }
+    
+    func hideBars(isHidden:Bool){
+        self.navigationController?.setNavigationBarHidden(isHidden, animated: true)
+        appToolbar.isHidden = isHidden
+        
     }
     
     func save() {
@@ -186,18 +188,12 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     }
 }
 
-class Meme{
+struct Meme{
     var topText: String
     var bottomText: String
     var originalImage: UIImage?
     var memedImage: UIImage?
     
-    init(topText: String, bottomText: String, originalImage: UIImage, memedImage:UIImage) {
-        self.topText = topText
-        self.bottomText = bottomText
-        self.originalImage = originalImage
-        self.memedImage = memedImage
-    }
     
 }
 
