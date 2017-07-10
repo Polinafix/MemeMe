@@ -26,16 +26,16 @@ class SentMemesCollectionViewController: UICollectionViewController {
         flowLayout.minimumLineSpacing = space
         flowLayout.itemSize = CGSize(width: dimension, height: dimension)
         
-        shareData()
+        updateData()
 
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        shareData()
+        updateData()
         collectionView!.reloadData()
     }
     
-    func shareData(){
+    func updateData(){
         memes = (UIApplication.shared.delegate as! AppDelegate).memes
     }
 

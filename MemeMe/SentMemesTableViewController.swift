@@ -16,16 +16,16 @@ class SentMemesTableViewController: UITableViewController {
         super.viewDidLoad()
         self.tableView.separatorStyle = .none
         
-        shareData()
+        updateData()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        shareData()
+        updateData()
         tableView.reloadData()
     }
     
-    func shareData(){
+    func updateData(){
         memes = (UIApplication.shared.delegate as! AppDelegate).memes
     }
 
@@ -60,7 +60,7 @@ class SentMemesTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
             (UIApplication.shared.delegate as! AppDelegate).memes.remove(at: indexPath.row)
-            shareData()
+            updateData()
             tableView.deleteRows(at: [indexPath], with: .fade)
         }
     }
